@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const { json } = require("stream/consumers");
 const app = express();
 
 app.use(express.json());
@@ -20,12 +21,17 @@ function getData(){
 }
 
 app.get("/goals", function (req, res) {
-  const goals = JSON.parse(fs.readFileSync("data.json"));
-  res.json(goals);
+  const goals = getData();
+  if(goals.length > 0){
+    res.json(getData());
+  } else {
+    res.status(204).json({ msg: "List is empty" }); // 204 is for no content
+  }
+  
 });
 
 app.get("/goals/:id", function (req, res) {
-  const goals = JSON.parse(fs.readFileSync("data.json"));
+  const goals = JSON.parse(fs.readFileSync(path));
   const goalId = parseInt(req.params.id);
   const goal = goals.find((g) => g.id === goalId);
 
