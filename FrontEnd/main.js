@@ -26,9 +26,9 @@ async function fetchData() {
   }
 }
 
-async function toggleItem(id, completed){
-  try{
-    await axios.put(`${url}/${id}`,{
+async function toggleItem(id, completed) {
+  try {
+    await axios.put(`${url}/${id}`, {
       isCompleted: !completed,
     });
 
@@ -38,26 +38,39 @@ async function toggleItem(id, completed){
   }
 }
 
-async function editItem(id,title) {
- const titleText = document.getElementsByClassName("item-text");
-  const newTitle = prompt('Edit item:', titleText.textContent);
+async function editItem(id, title) {
+  const titleText = document.getElementsByClassName("item-text");
+  const newTitle = prompt("Edit item:", titleText.textContent);
   try {
-    await axios.put(`${url}/${id}`,{
+    await axios.put(`${url}/${id}`, {
       title: newTitle.trim(),
     });
     updateList();
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 async function deleteItem(id) {
   try {
-    await axios.delete(`${url}/${id}`)
+    await axios.delete(`${url}/${id}`);
     updateList();
   } catch (error) {
     console.error(error);
   }
+}
+
+async function counter() { 
+  try {
+    let data = await fetchData();
+    const completeCount = data.filter((item) => item.isCompleted === true).length;
+    const totalCount = data.length;
+    
+    document.getElementById("completed-count").textContent = completeCount;
+    document.getElementById("total-count").textContent = totalCount;
+  } catch (error) {
+    console.error(error);
+  } 
 }
 
 async function updateList() {
@@ -71,6 +84,7 @@ async function updateList() {
                 No items in your bucket list yet. Add some dreams above!
             </div>
         `;
+
     return;
   }
 
@@ -79,14 +93,17 @@ async function updateList() {
     itemElement.className = "item";
     itemElement.innerHTML = `
             <div class="checkbox ${
-              item.isCompleted ? "checked" : ""}" onclick="toggleItem(${item.id},${item.isCompleted})">
+              item.isCompleted ? "checked" : ""
+            }" onclick="toggleItem(${item.id},${item.isCompleted})">
                 ${item.isCompleted ? '<i class="fas fa-check"></i>' : ""}
             </div>
             <span class="item-text ${item.isCompleted ? "completed" : ""}">${
       item.title
     }</span>
             <div class="actions">
-                <button class="action-btn edit" onclick="editItem(${item.id}, '${item.title.replace(/'/g, "\\'")}')">
+                <button class="action-btn edit" onclick="editItem(${
+                  item.id
+                }, '${item.title.replace(/'/g, "\\'")}')">
 
                     <i class="fas fa-edit"></i>
                 </button>
@@ -99,6 +116,7 @@ async function updateList() {
         `;
     itemsList.appendChild(itemElement);
   });
+  counter();
 }
 
 window.addEventListener("DOMContentLoaded", function () {
