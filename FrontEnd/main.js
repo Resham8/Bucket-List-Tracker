@@ -51,6 +51,15 @@ async function editItem(id,title) {
   }
 }
 
+async function deleteItem(id) {
+  try {
+    await axios.delete(`${url}/${id}`)
+    updateList();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function updateList() {
   const itemsList = document.getElementById("items-list");
   itemsList.innerHTML = "";
