@@ -1,8 +1,11 @@
 const express = require("express");
 const fs = require("fs");
+const cors = require("cors");
 const app = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 const DATA_FILE = "./data.json";
 let idCounter = 1;
@@ -55,7 +58,7 @@ app.get("/goals/:id", (req, res) => {
 
 // POST new goal
 app.post("/goals", (req, res) => {
-  const { title, description, isCompleted } = req.body;
+  const { title, isCompleted } = req.body;
   const goals = readDataSync();
 
   // Find the highest ID and increment
@@ -64,7 +67,7 @@ app.post("/goals", (req, res) => {
   const newGoal = {
     id: idCounter,
     title,
-    description,
+    // description,
     isCompleted: isCompleted || false,
   };
 
@@ -80,7 +83,7 @@ app.post("/goals", (req, res) => {
 // PUT update goal
 app.put("/goals/:id", (req, res) => {
   const goalId = parseInt(req.params.id);
-  const { title, description, isCompleted } = req.body;
+  const { title, isCompleted } = req.body;
   
   const goals = readDataSync();
 
@@ -93,7 +96,7 @@ app.put("/goals/:id", (req, res) => {
   goals[goalIndex] = {
     ...goals[goalIndex],
     title: title || goals[goalIndex].title,
-    description: description || goals[goalIndex].description,
+    // description: description || goals[goalIndex].description,
     isCompleted:
       isCompleted !== undefined ? isCompleted : goals[goalIndex].isCompleted,
   };
