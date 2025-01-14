@@ -26,6 +26,31 @@ async function fetchData() {
   }
 }
 
+async function toggleItem(id, completed){
+  try{
+    await axios.put(`${url}/${id}`,{
+      isCompleted: !completed,
+    });
+
+    updateList();
+  } catch {
+    console.error(error);
+  }
+}
+
+async function editItem(id,title) {
+ const titleText = document.getElementsByClassName("item-text");
+  const newTitle = prompt('Edit item:', titleText.textContent);
+  try {
+    await axios.put(`${url}/${id}`,{
+      title: newTitle.trim(),
+    });
+    updateList();
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 async function updateList() {
   const itemsList = document.getElementById("items-list");
   itemsList.innerHTML = "";
@@ -45,15 +70,15 @@ async function updateList() {
     itemElement.className = "item";
     itemElement.innerHTML = `
             <div class="checkbox ${
-              item.isCompleted ? "checked" : ""
-            }" onclick="toggleItem(${item.id})">
+              item.isCompleted ? "checked" : ""}" onclick="toggleItem(${item.id},${item.isCompleted})">
                 ${item.isCompleted ? '<i class="fas fa-check"></i>' : ""}
             </div>
             <span class="item-text ${item.isCompleted ? "completed" : ""}">${
       item.title
     }</span>
             <div class="actions">
-                <button class="action-btn edit" onclick="editItem(${item.id})">
+                <button class="action-btn edit" onclick="editItem(${item.id}, '${item.title.replace(/'/g, "\\'")}')">
+
                     <i class="fas fa-edit"></i>
                 </button>
                 <button class="action-btn delete" onclick="deleteItem(${
