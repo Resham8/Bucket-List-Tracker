@@ -1,8 +1,14 @@
 const url = "http://localhost:3000/goals";
+
 function sendRequest() {
+  const titleText = document.getElementById("new-item").value;
+  if(titleText == ""){
+    alert("please write something first");
+    return;
+  }
   axios
     .post(url, {
-      title: document.getElementById("new-item").value,
+      title: titleText,
       isCompleted: false,
     })
     .then(

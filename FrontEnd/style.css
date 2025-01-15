@@ -7,7 +7,7 @@
 
 body {
     background: linear-gradient(to bottom, #f3e7ff, #ffffff);
-    min-height: 100vh;
+    min-height: 100vh;    
 }
 
 .nav {
@@ -38,7 +38,7 @@ body {
 
 .nav h1 {
     background: linear-gradient(45deg, #7c3aed, #3b82f6);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 1.5rem;
 }
