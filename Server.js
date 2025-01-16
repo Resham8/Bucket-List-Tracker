@@ -5,7 +5,13 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors());
+const corsOptions = {
+  origin: "http://127.0.0.1:5501/FrontEnd/",
+  methods: "GET,POST,PUT,DELETE",  
+};
+
+
+app.use(cors(corsOptions));
 
 const DATA_FILE = "./data.json";
 let idCounter = 1;
