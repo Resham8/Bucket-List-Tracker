@@ -1,7 +1,11 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 const app = express();
+
+JWT_SECRET = process.env.SECRETE;
 
 app.use(express.json());
 
@@ -10,11 +14,28 @@ const corsOptions = {
   methods: "GET,POST,PUT,DELETE",  
 };
 
-
 app.use(cors(corsOptions));
 
 const DATA_FILE = "./data.json";
 let idCounter = 1;
+
+const users = [];
+
+// JWT authentication
+app.post("/signUp", function(req, res){
+  const username = req.body.username;
+  const password = req.body.password;
+
+  users.push({
+      username,
+      password
+  })
+  
+  res.json({
+      mesg: "You have signed up"
+  });
+})
+
 
 function readDataSync() {
   try {
